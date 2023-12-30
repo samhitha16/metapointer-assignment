@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { CreateUserSchema } from "../../schemas/user";
-import { create } from "../../services/user/create";
+import { create } from "../../services/user";
 import { ApiError, ApiErrorType } from "../../error";
 
 export async function register(
