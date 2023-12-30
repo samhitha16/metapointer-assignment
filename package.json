@@ -1,0 +1,36 @@
+{
+  "name": "metapointer-assignment",
+  "version": "1.0.0",
+  "main": "./src/main.ts",
+  "repository": "https://github.com/samhitha16/metapointer-assignment",
+  "author": "elliot14A <akshithkatkuri14@gmail.com>",
+  "scripts": {
+    "dev": "tsc --project './tsconfig.build.json' --watch &NODE_ENV=development nodemon ./dist/main.js",
+    "build": "tsc --project './tsconfig.build.json'",
+    "start": "yarn run build && NODE_ENV=production node ./dist/main.js",
+    "watch": "tsc --project './tsconfig.build.json' --watch"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@badrap/result": "^0.2.13",
+    "@types/cors": "^2.8.17",
+    "@types/morgan": "^1.9.9",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.10",
+    "dotenv": "^16.3.1",
+    "eslint": "^8.54.0",
+    "express": "^4.18.2",
+    "morgan": "^1.10.0",
+    "pino": "^8.16.2",
+    "pino-pretty": "^10.2.3",
+    "ts-node": "^10.9.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.9.4",
+    "nodemon": "^3.0.1",
+    "typescript": "^5.3.2"
+  }
+}
