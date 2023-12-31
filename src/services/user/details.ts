@@ -16,8 +16,12 @@ export async function details(
     if (!user) {
       return Result.err(new ApiError(ApiErrorType.NotFound, "User not found"));
     }
+    console.log(user);
     return Result.ok(user);
-  } catch (err) {
+  } catch (err: any) {
+    if (err.name === "CastError") {
+      return Result.err(new ApiError(ApiErrorType.NotFound, "User not found"));
+    }
     return Result.err(
       new ApiError(ApiErrorType.InternalServerError, "Something went wrong"),
     );

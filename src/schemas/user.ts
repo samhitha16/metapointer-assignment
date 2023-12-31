@@ -26,6 +26,16 @@ export const addBalaceSchema = z.object({
   }),
 });
 
+export const transferAmountSchema = z.object({
+  body: z.object({
+    receiverId: z.string(),
+    amount: z
+      .number()
+      .gte(10, { message: "amount must be greater then or equal to 10" }),
+  }),
+});
+
 export type LoginUserSchema = z.infer<typeof loginUserSchema>;
 export type CreateUserSchema = z.infer<typeof createUserSchema>;
 export type AddBalanceSchema = z.infer<typeof addBalaceSchema>;
+export type TransferAmountSchema = z.infer<typeof transferAmountSchema>;

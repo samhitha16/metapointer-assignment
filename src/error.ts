@@ -6,12 +6,12 @@ export enum ApiErrorType {
 }
 
 export class ApiError extends Error {
-  error: ApiErrorType;
+  type: ApiErrorType;
   override message: string;
 
   constructor(error: ApiErrorType, message: string) {
     super(message);
-    this.error = error;
+    this.type = error;
     this.message = message;
   }
 }

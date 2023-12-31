@@ -14,7 +14,7 @@ export async function register(
   } else {
     const e = userResult.error;
     if (e instanceof ApiError) {
-      if (e.error === ApiErrorType.EntityAlreadyExist) {
+      if (e.type === ApiErrorType.EntityAlreadyExist) {
         return res.status(409).send({ message: e.message });
       }
     }

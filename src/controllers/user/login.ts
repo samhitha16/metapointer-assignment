@@ -11,10 +11,12 @@ export async function login(
   res: Response,
 ) {
   const { email, password } = req.body;
-  const userResult = await details({ email }, { _id: 1 });
+  const userResult = await details(
+    { email },
+    { _id: 1, password: 1, email: 1 },
+  );
   if (userResult.isOk) {
     const user = userResult.value;
-    console.log(user);
     if (await argon2.verify(user.password, password).catch((_) => false)) {
       const sessionResult = await create({
         userId: user._id,
@@ -57,7 +59,7 @@ export async function login(
   } else {
     const e = userResult.error;
     if (e instanceof ApiError) {
-      if (e.error === ApiErrorType.NotFound) {
+      if (e.type === ApiErrorType.NotFound) {
         return res.status(401).send({ message: "Invalid email or password" });
       }
     }
