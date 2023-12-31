@@ -19,37 +19,37 @@ export async function send(input: {
     );
   }
 
-  const rUser = await details({ _id: receiverId }, { _id: 1 });
-  if (rUser.isErr) {
-    if (rUser.error instanceof ApiError) {
-      const err = rUser.error;
-      if (err.type === ApiErrorType.NotFound) {
-        return Result.err(
-          new ApiError(ApiErrorType.ValidationError, "Receiver not found"),
-        );
-      }
-      console.log(err);
-    }
-    return Result.err(
-      new ApiError(ApiErrorType.InternalServerError, "Something went wrong"),
-    );
-  }
-
-  const rUserUpdated = await UserModel.updateOne(
-    { _id: receiverId },
-    { $inc: { balance: amount } },
-    { new: true },
-  );
-
-  if (rUserUpdated.modifiedCount === 0) {
-    return Result.err(
-      new ApiError(ApiErrorType.ValidationError, "Receiver not found"),
-    );
-  }
-
-  const senderAmount = amount - discount;
-
   try {
+    const rUser = await details({ _id: receiverId }, { _id: 1 });
+    if (rUser.isErr) {
+      if (rUser.error instanceof ApiError) {
+        const err = rUser.error;
+        if (err.type === ApiErrorType.NotFound) {
+          return Result.err(
+            new ApiError(ApiErrorType.ValidationError, "Receiver not found"),
+          );
+        }
+        console.log(err);
+      }
+      return Result.err(
+        new ApiError(ApiErrorType.InternalServerError, "Something went wrong"),
+      );
+    }
+
+    const rUserUpdated = await UserModel.updateOne(
+      { _id: receiverId },
+      { $inc: { balance: amount } },
+      { new: true },
+    );
+
+    if (rUserUpdated.modifiedCount === 0) {
+      return Result.err(
+        new ApiError(ApiErrorType.ValidationError, "Receiver not found"),
+      );
+    }
+
+    const senderAmount = amount - discount;
+
     const user = await UserModel.updateOne(
       { _id: senderId, balance: { $gte: amount } },
       { $inc: { balance: -senderAmount } },
@@ -67,6 +67,7 @@ export async function send(input: {
       senderId,
       receiverId,
       type: TransactionType.Debit,
+      discount,
     });
 
     if (transaction.isErr) {

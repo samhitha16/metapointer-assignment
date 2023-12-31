@@ -11,6 +11,7 @@ export interface TransactionDocument extends mongoose.Document {
   receiverId: UserDocument["_id"];
   type: TransactionType;
   amount: number;
+  discount?: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -20,6 +21,7 @@ const transactionSchema = new mongoose.Schema(
     senderId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     receiverId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     amount: { type: Number, required: true },
+    discount: { type: Number, default: 0 },
     type: {
       type: String,
       enum: Object.values(TransactionType),
@@ -41,6 +43,7 @@ export interface TransactionInput {
   receiverId: string;
   amount: number;
   type: TransactionType;
+  discount?: number;
 }
 
 export default TransactionModel;
