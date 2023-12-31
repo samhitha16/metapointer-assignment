@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { AddBalanceSchema } from "../../../schemas/user";
 import { Claims } from "../../../utils/jwt";
-import { add as addBalance } from "../../../services/user/balance/add";
+import { add as addBalance } from "../../../services/user/transactions/add";
 
 export async function add(
   req: Request<{}, {}, AddBalanceSchema["body"]>,
@@ -11,15 +11,13 @@ export async function add(
   const {
     claims: { userId },
   } = res.locals;
-  const newBalanceResult = await addBalance({ amount, userId });
+  const transactionResult = await addBalance({ amount, senderId: userId });
 
-  if (newBalanceResult.isErr) {
-    const e = newBalanceResult.error;
+  if (transactionResult.isErr) {
+    const e = transactionResult.error;
     return res.status(500).send({ message: e.message });
   }
-  const newBalance = newBalanceResult.value;
+  const transaction = transactionResult.value;
 
-  return res.json({
-    message: `Added ${amount} to your balance, your new balance is ${newBalance}`,
-  });
+  return res.json(transaction);
 }

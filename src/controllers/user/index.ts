@@ -5,11 +5,11 @@ import { createUserSchema, loginUserSchema } from "../../schemas/user";
 import { login } from "./login";
 import authorize from "../../middleware/authorize";
 import { logout } from "./logout";
-import { initUserBalanceRoutes } from "./balance";
+import { initUserBalanceRoutes } from "./transactions";
 
 export function initUserRoutes(): Router {
   const router = Router();
-  router.use("/balance", authorize, initUserBalanceRoutes());
+  router.use("/transactions", authorize, initUserBalanceRoutes());
   router.post("/register", validate(createUserSchema), register);
   router.post("/login", validate(loginUserSchema), login);
   router.post("/logout", authorize, logout);
