@@ -23,6 +23,8 @@ services:
       - MONGO_URI=mongodb://mongodb:27017/assignment
       - ACCESS_KEY_JWT_SECRET=access_key_secret
       - REFRESH_KEY_JWT_SECRET=refresh_key_secret
+    ports:
+      - "8080:8080"
     depends_on:
       - mongodb
     networks:
