@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 import logger from "./logger";
+import { details } from "../services/session/details";
+import UserModel from "../models/user";
 
 export interface Claims {
   email: string;
@@ -51,4 +53,33 @@ export function verifyJwt(token: string, tokenType: TokenType) {
       decoded: null,
     };
   }
+}
+
+export async function reissueAccessToken({
+  refreshToken,
+}: {
+  refreshToken: string;
+}) {
+  const { decoded, expired } = verifyJwt(refreshToken, TokenType.RefreshToken);
+  if (expired || !decoded) {
+    return false;
+  }
+
+  const sessionResult = await details({ _id: decoded.sessionId });
+
+  if (sessionResult.isErr) return false;
+  let session = sessionResult.value;
+  if (!session.valid) return false;
+
+  const user = await UserModel.findById(decoded.userId);
+  if (!user) return false;
+
+  const accessTokenTtl = process.env["ACCESSTOKENTTL"] || "15m";
+  const newAccessToken = signJwt(
+    { userId: user._id, email: user.email, sessionId: session._id },
+    TokenType.AccessToken,
+    { expiresIn: accessTokenTtl },
+  );
+
+  return newAccessToken;
 }

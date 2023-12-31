@@ -23,7 +23,7 @@ export async function login(
         return res.status(500).send({ message: sessionResult.error.message });
       }
 
-      const accessTokenTtl: string = process.env["ACCESSTOKENTTL"] || "15m";
+      const accessTokenTtl: string = process.env["ACCESSTOKENTTL"] || "5m";
       const refreshTokenTtl: string = process.env["REFRESHTOKENTTL"] || "1y";
 
       const accessToken = signJwt(

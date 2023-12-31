@@ -5,6 +5,7 @@ import morgan from "morgan";
 import logger from "./utils/logger";
 import { initRoutes } from "./controllers/routes";
 import { connect } from "./utils/database";
+import validateJwt from "./middleware/validate_jwt";
 
 (async function () {
   // config dotenv
@@ -25,6 +26,7 @@ import { connect } from "./utils/database";
       ":remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] - :response-time ms",
     ),
   );
+  app.use(validateJwt);
 
   app.use("/api", initRoutes());
 
