@@ -3,11 +3,16 @@ import { FilterQuery } from "mongoose";
 import { Result } from "@badrap/result";
 import { ApiError, ApiErrorType } from "../../error";
 
+export type Select = {
+  [K in keyof UserDocument]?: 1;
+};
+
 export async function details(
-  select: FilterQuery<UserDocument>,
-): Promise<Result<UserDocument>> {
+  query: FilterQuery<UserDocument>,
+  select: Select,
+) {
   try {
-    const user = await UserModel.findOne(select).lean();
+    const user = await UserModel.findOne(query).select(select).lean();
     if (!user) {
       return Result.err(new ApiError(ApiErrorType.NotFound, "User not found"));
     }

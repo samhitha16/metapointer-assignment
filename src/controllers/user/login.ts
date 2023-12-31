@@ -11,9 +11,10 @@ export async function login(
   res: Response,
 ) {
   const { email, password } = req.body;
-  const userResult = await details({ email });
+  const userResult = await details({ email }, { _id: 1 });
   if (userResult.isOk) {
     const user = userResult.value;
+    console.log(user);
     if (await argon2.verify(user.password, password).catch((_) => false)) {
       const sessionResult = await create({
         userId: user._id,
