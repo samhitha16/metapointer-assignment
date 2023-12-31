@@ -5,7 +5,7 @@ import { addBalaceSchema, transferAmountSchema } from "../../../schemas/user";
 import { send } from "./send";
 import { details } from "./details";
 
-export function initUserBalanceRoutes(): Router {
+export function initTransactionsRoutes(): Router {
   const router = Router();
   router.get("/", details);
   router.post("/add", validate(addBalaceSchema), add);
